@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class HashGenerator {
 
     private final HashRepository hashRepository;
@@ -22,7 +23,6 @@ public class HashGenerator {
     @Value("${hash.hash.capacity:10000}")
     private int capacity;
 
-    @Transactional
     public void generateHash() {
         log.info("Start generate hash number : {} ", capacity);
         List<Long> numbers = hashRepository.getUniqueNumbers(capacity);
@@ -32,8 +32,7 @@ public class HashGenerator {
                 .toList();
         hashRepository.saveAll(hashes);
     }
-
-    @Transactional
+    
     public List<String> getHashes(long amount) {
         log.info("Get hash number : {} ", amount);
         List<Hash> hashes = hashRepository.getHashesAndDelete(amount);
@@ -42,7 +41,6 @@ public class HashGenerator {
             generateHash();
             hashes.addAll(hashRepository.getHashesAndDelete(amount - hashes.size()));
         }
-
         return hashes.stream().map(Hash::getHash).toList();
     }
 

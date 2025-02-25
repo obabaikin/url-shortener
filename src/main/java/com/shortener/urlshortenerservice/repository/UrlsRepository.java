@@ -15,9 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UrlsRepository {
-    final private UrlsJpaRepository urlsJpaRepository;
-
-    final private MessageSource messageSource;
+    private final UrlsJpaRepository urlsJpaRepository;
+    private final MessageSource messageSource;
 
     public Urls findByHash(String hash) {
         return urlsJpaRepository.findByHash(hash).orElseThrow(() ->
