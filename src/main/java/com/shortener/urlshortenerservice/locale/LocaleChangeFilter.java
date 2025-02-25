@@ -33,8 +33,8 @@ public class LocaleChangeFilter extends OncePerRequestFilter {
                     break;
                 }
             }
-        }
-        if (LocaleContextHolder.getLocale() == null) {
+            LocaleContextHolder.setLocale(Locale.ENGLISH);
+        } else {
             LocaleContextHolder.setLocale(Locale.ENGLISH);
         }
         filterChain.doFilter(request, response);

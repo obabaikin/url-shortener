@@ -18,6 +18,9 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +52,7 @@ class HashGeneratorTest {
         when(base62Encoder.encodeList(numbers)).thenReturn(hashes);
 
         hashGenerator.generateHash();
+        verify(hashRepository, times(1)).saveAll(any());
     }
 
     @Test

@@ -57,7 +57,7 @@ public class LocalCache {
     private void getExtraHashes() {
         log.info(" Get extra hash. Local hash has: {}, filling  {}", hashes.size(), filling.get());
         if (filling.compareAndSet(false, true)) {
-            hashGenerator.getHashesAsync(capacity - hashes.size())
+            hashGenerator.getHashesAsync((long) capacity - hashes.size())
                     .thenAccept(strings -> {
                         try {
                             hashes.addAll(strings);
@@ -65,9 +65,9 @@ public class LocalCache {
                             log.error("Error during extra update", e);
                         }
                     })
-                    .thenRun(() -> {
-                        filling.set(false);
-                    });
+                    .thenRun(() ->
+                        filling.set(false)
+                    );
         }
     }
 
