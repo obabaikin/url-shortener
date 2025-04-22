@@ -1,0 +1,82 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Java
+        uses: actions/setup-java@v4.5.0
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path:
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Give gradlew execution permission
+        run: chmod +x ./gradlew
+
+      - name: Copy test environment variables
+        run: cp .env.test .env
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Install redis-cli
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-tools  
+
+      - name: Set up PostgreSQL with Docker Compose
+        run: |
+          docker-compose down
+          docker-compose up -d
+
+      - name: Wait for Redis to be ready
+        run: |
+          until docker inspect --format '{{.State.Health.Status}}' master_redis | grep -q "healthy"; do
+            echo "Waiting for Redis healthcheck..."
+            sleep 1
+          done
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until docker inspect --format '{{.State.Health.Status}}' master_postgres | grep -q "healthy"; do
+            echo "Waiting for PostgreSQL..."
+            sleep 1
+          done
+
+      - name: Run tests
+        run: ./gradlew test --no-daemon
+
+      - name: Upload test results
+        if: always() # Ensures this step runs even if tests fail
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: test-results
+          path: build/test-results
+
+      - name: Build the project
+        run: ./gradlew clean build --no-daemon

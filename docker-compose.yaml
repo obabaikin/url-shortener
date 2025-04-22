@@ -1,0 +1,50 @@
+services:
+  master_postgres:
+    image: postgres:13.3
+    container_name: master_postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./.docker/data/postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  master_redis:
+    image: redis/redis-stack:latest
+    container_name: master_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  sonarqube:
+    image: sonarqube:9.9.8-community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./.docker/context/conf/sonarqube:/opt/sonarqube/conf
+      - ./.docker/data/sonarqube/sonarqube_data:/opt/sonarqube/data
+      - ./.docker/data/sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
+      - ./.docker/data/sonarqube/sonarqube_logs:/opt/sonarqube/logs
+      - ./src:/usr/src/app
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/api/system/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 5s
