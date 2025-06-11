@@ -38,8 +38,7 @@ out/
 .vscode/
 
 ### Env ###
-.env
-.env.dev
+.env*
 
 ### Extra ###
 .docker

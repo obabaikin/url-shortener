@@ -119,7 +119,7 @@ tasks.jacocoTestCoverageVerification {
 			)
 			enabled = true
 			limit {
-				minimum = BigDecimal(0.7).setScale(2, BigDecimal.ROUND_HALF_UP) // Задаем минимальный уровень покрытия
+				minimum = BigDecimal(0.7).setScale(2, BigDecimal.ROUND_HALF_UP)
 			}
 		}
 	}

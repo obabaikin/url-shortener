@@ -34,7 +34,7 @@ hash:
     redis-ttl-minutes: 1440
     prefixes:
       url-prefix: a01.
-  test-url:
+  app:
     url-name : "http://url-test-u-s.com/"
 
 locale:

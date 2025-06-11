@@ -15,3 +15,6 @@ To reduce response time, data caching in Redis is used.
 There is a scheduled archiving procedure that checks data daily.
 The code covered by tests.
 CI/CD created.
+
+An example of variables:
+DB_DB=postgres;DB_PASSWORD=password;DB_URL=jdbc:postgresql://localhost:5432/postgres;DB_USER=user;REDIS_PORT=6379;REDIS_HOST=localhost;SERVER_PORT=8080;APP_URL_NAME=http://url-shortner-service.com/

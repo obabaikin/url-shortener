@@ -37,7 +37,7 @@ public class UrlShortenerController {
     private final UrlShortenerService urlShortenerService;
     private final MessageSource messageSource;
 
-    @Value("${hash.test-url.url-name}")
+    @Value("${hash.app.url-name}")
     private String urlName;
 
     @Value("${hash.hash.max-hash-length}")

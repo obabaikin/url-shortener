@@ -12,6 +12,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_DB: ${{ secrets.DB_DB }}
+      DB_DRIVER: ${{ secrets.DB_DRIVER }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_JPA_PLATFORM: ${{ secrets.DB_JPA_PLATFORM }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -34,9 +42,6 @@ jobs:
 
       - name: Give gradlew execution permission
         run: chmod +x ./gradlew
-
-      - name: Copy test environment variables
-        run: cp .env.test .env
 
       - name: Install Docker Compose
         run: |

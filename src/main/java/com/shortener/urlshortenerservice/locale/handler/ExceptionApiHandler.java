@@ -1,4 +1,4 @@
-package com.shortener.urlshortenerservice.handler;
+package com.shortener.urlshortenerservice.locale.handler;
 
 import com.shortener.urlshortenerservice.exception.CacheEmptyException;
 import com.shortener.urlshortenerservice.exception.InternalValidationException;

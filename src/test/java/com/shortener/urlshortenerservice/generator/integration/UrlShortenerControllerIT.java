@@ -1,10 +1,10 @@
-package com.shortener.urlshortenerservice.integration;
+package com.shortener.urlshortenerservice.generator.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redis.testcontainers.RedisContainer;
 import com.shortener.urlshortenerservice.controller.UrlShortenerController;
 import com.shortener.urlshortenerservice.dto.UrlDto;
-import com.shortener.urlshortenerservice.handler.ExceptionApiHandler;
+import com.shortener.urlshortenerservice.locale.handler.ExceptionApiHandler;
 import com.shortener.urlshortenerservice.locale.LocaleChangeFilter;
 import com.shortener.urlshortenerservice.model.Urls;
 import com.shortener.urlshortenerservice.repository.RedisRepository;
@@ -60,7 +60,7 @@ class UrlShortenerControllerIT {
 
     private static final Logger log = LoggerFactory.getLogger(UrlShortenerControllerIT.class);
 
-    @Value("${hash.test-url.url-name}")
+    @Value("${hash.app.url-name}")
     private String expectedUrl;
 
     private static String hashTest;

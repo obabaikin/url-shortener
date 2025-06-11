@@ -20,7 +20,7 @@ public class UrlShortenerService {
     private final RedisRepository redisRepository;
     private final LocalCache localCache;
 
-    @Value("${hash.test-url.url-name}")
+    @Value("${hash.app.url-name}")
     private String urlName;
 
     public UrlDto getShortUrl(String longUrl) {

@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: user
-    password: password
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -22,11 +22,11 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   data:
     redis:
-      port: 6379
-      host: localhost
+      port: ${REDIS_PORT}
+      host: ${REDIS_HOST}
 
 server:
-  port: 8095
+  port: ${SERVER_PORT}
 
 logging:
   level:
@@ -45,8 +45,8 @@ hash:
     redis-ttl-minutes: 1440
     prefixes:
       url-prefix: a01.
-  test-url:
-    url-name : "http://url-shortner-service.com/"
+  app:
+    url-name : ${APP_URL_NAME}
 
 locale:
   request:
