@@ -10,11 +10,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -60,14 +60,8 @@ class HashGeneratorTest {
         int testNumberElements = 5;
         int wasElementsInHashTable = 2;
 
-        ArrayList<HashItem> arrayList2 = new ArrayList<>();
-        arrayList2.add(new HashItem(strings.get(0)));
-        arrayList2.add(new HashItem(strings.get(1)));
-
-        ArrayList<HashItem> arrayList3 = new ArrayList<>();
-        arrayList3.add(new HashItem(strings.get(2)));
-        arrayList3.add(new HashItem(strings.get(3)));
-        arrayList3.add(new HashItem(strings.get(4)));
+        List<HashItem> arrayList2 = getHashItemsFromStrings(0, wasElementsInHashTable, strings);
+        List<HashItem> arrayList3 = getHashItemsFromStrings(wasElementsInHashTable, testNumberElements, strings);
 
 
         when(hashRepository.getHashesAndDelete(testNumberElements)).thenReturn(arrayList2);
@@ -86,11 +80,7 @@ class HashGeneratorTest {
         int testNumberElements = 5;
 
         when(hashRepository.getHashesAndDelete(testNumberElements)).
-                thenReturn(List.of(new HashItem(strings.get(0)),
-                        new HashItem(strings.get(1)),
-                        new HashItem(strings.get(2)),
-                        new HashItem(strings.get(3)),
-                        new HashItem(strings.get(4))));
+                thenReturn(getHashItemsFromStrings(0, testNumberElements, strings));
 
         List<String> stringsResult = hashGenerator.getHashesAsync(testNumberElements).
                 get(1000L, TimeUnit.MILLISECONDS);
@@ -98,5 +88,11 @@ class HashGeneratorTest {
         assertEquals(testNumberElements, stringsResult.size(), "Size of the result list is not correct");
         assertEquals(testNumberElements, strings.size(), "Size of strings is not correct");
         strings.forEach(hash -> assertTrue(stringsResult.contains(hash), "Result list does not contain the element"));
+    }
+
+    private List<HashItem> getHashItemsFromStrings(int startIndex, int endIndex, List<String> strings) {
+        return strings.subList(startIndex, endIndex).stream()
+                .map(HashItem::new)
+                .collect(Collectors.toList());
     }
 }

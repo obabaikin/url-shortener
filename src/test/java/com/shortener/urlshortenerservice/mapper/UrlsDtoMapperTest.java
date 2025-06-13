@@ -2,33 +2,41 @@ package com.shortener.urlshortenerservice.mapper;
 
 import com.shortener.urlshortenerservice.dto.UrlDto;
 import com.shortener.urlshortenerservice.model.Urls;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
 class UrlsDtoMapperTest {
-    private UrlsDtoMapper urlsDtoMapper = new UrlsDtoMapperImpl();
+    private final UrlsDtoMapper urlsDtoMapper = new UrlsDtoMapperImpl();
 
-    @Test
-    void toUrlDtoLongUrlSuccessTest() {
+    @ParameterizedTest
+    @MethodSource("provideUrlsForMapping")
+    void toUrlDtoLongUrlSuccessTest(String inputUrl, String inputHash) {
 
-        String hashTest = "r34auT";
-        String urlTest = "https://www.test-lond.com/url/v1/create-result-for-test";
-
-        Urls urlsReference = Urls.builder()
-                .url(urlTest)
-                .hash(hashTest)
+        Urls input = Urls.builder()
+                .url(inputUrl)
+                .hash(inputHash)
                 .build();
 
-        UrlDto urlDtoReference = UrlDto.builder()
-                .url(urlTest)
+        UrlDto expected = UrlDto.builder()
+                .url(inputUrl)
                 .build();
 
-        UrlDto urlDtoResult = urlsDtoMapper.toUrlDtoLongUrl(urlsReference);
+        UrlDto actual = urlsDtoMapper.toUrlDtoLongUrl(input);
 
-        assertEquals(urlDtoReference, urlDtoResult, "The method toUrlDtoLongUrl() is not correct.");
+        assertEquals(expected, actual, "The method toUrlDtoLongUrl() is not correct.");
+    }
+
+    private static Stream<Arguments> provideUrlsForMapping() {
+        return Stream.of(
+                Arguments.of("https://example.com/page", "abc123"),
+                Arguments.of("http://test.com", "xyz789"),
+                Arguments.of("", "emptyHash"),
+                Arguments.of(null, "nullUrl")
+        );
     }
 }

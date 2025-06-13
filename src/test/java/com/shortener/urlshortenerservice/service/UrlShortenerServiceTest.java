@@ -47,6 +47,7 @@ class UrlShortenerServiceTest {
         urlName = "http://test-shortner-service.com/";
         longUrl = "http://www.test-urlshortener.com/long-url/v1/there-is-a-long-url-here";
         hash = "a1b1";
+
         ReflectionTestUtils.setField(urlShortenerService, "urlName", urlName);
     }
 

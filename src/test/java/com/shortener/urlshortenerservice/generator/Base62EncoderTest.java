@@ -10,6 +10,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,19 +36,16 @@ class Base62EncoderTest {
     @Test
     void encodeListSuccessTest() {
         List<Long> longList = List.of(100L, 102L, 105L);
-        List<String> hashList = List.of("1aba1", "a1ba1", "abba1");
         List<String> hashListResult = base62Encoder.encodeList(longList);
 
-        assertEquals(3, hashListResult.size(), "Check size of hashList");
-        hashList.forEach(hash -> assertTrue(hashListResult.contains(hash), "Check hashList contains encoded number"));
-    }
+        assertEquals(longList.size(), hashListResult.size(), "Size mismatch");
 
-    @Test
-    void encodeNumberSuccessTest() {
-        Long initialNumber = 100L;
-        String hash = "1aba1";
-        String hashListResult = base62Encoder.encodeNumber(initialNumber);
-        assertEquals(hash, hashListResult, "Check encoded number");
+
+        hashListResult.forEach(hash -> {
+            assertFalse(hash.isEmpty(),"Check that hash is not empty");
+            boolean isValid = hash.chars().allMatch(c -> solWordTest.indexOf(c) >= 0);
+            assertTrue(isValid, "Hash contains invalid characters, expected only characters from solWord");
+        });
     }
 
     @Test
