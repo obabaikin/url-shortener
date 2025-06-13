@@ -37,6 +37,7 @@ class LocalCacheRetryTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     void getCachedHashNoElementInQueueExceptionFailTest() {
         Queue<String> hashes = new ArrayBlockingQueue<>(capacityTest);
         String message = "There are a lot of requests. Please, try again later.";

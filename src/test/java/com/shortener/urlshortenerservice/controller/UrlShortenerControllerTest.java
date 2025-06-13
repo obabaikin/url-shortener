@@ -43,16 +43,13 @@ class UrlShortenerControllerTest {
     private MessageSource messageSource;
     @InjectMocks
     private UrlShortenerController urlShortenerController;
-
-    private int maxHashLength;
     private String urlController;
-    private String urlName;
 
     @BeforeEach
     void setUp() {
         urlController = "/api/url_shortener/v1/url";
-        urlName = "http://test-shortner-service.com/";
-        maxHashLength = 6;
+        String urlName = "http://test-shortner-service.com/";
+        int maxHashLength = 6;
 
         ReflectionTestUtils.setField(urlShortenerController, "urlName", urlName);
         ReflectionTestUtils.setField(urlShortenerController, "maxHashLength", maxHashLength);

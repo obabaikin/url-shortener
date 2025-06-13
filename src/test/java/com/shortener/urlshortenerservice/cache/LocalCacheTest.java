@@ -168,7 +168,7 @@ class LocalCacheTest {
 
     private AtomicBoolean getFillingFlag() {
         Object value = ReflectionTestUtils.getField(localCache, "filling");
-        if (value == null || !(value instanceof AtomicBoolean)) {
+        if (!(value instanceof AtomicBoolean)) {
             throw new IllegalStateException("Filling flag is not initialized or not an instance of AtomicBoolean.");
         }
         return (AtomicBoolean) value;

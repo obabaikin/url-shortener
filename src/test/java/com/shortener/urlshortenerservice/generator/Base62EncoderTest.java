@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,7 +30,11 @@ class Base62EncoderTest {
 
     @Test
     void initSuccessTest() {
-        solWordLengthTest = (int) ReflectionTestUtils.getField(base62Encoder, "solWordLength");
+        try{
+            solWordLengthTest = (int) Objects.requireNonNull(ReflectionTestUtils.getField(base62Encoder, "solWordLength"));
+        } catch (NullPointerException e) {
+            solWordLengthTest = 0;
+        }
         assertEquals(solWordTest.length(), solWordLengthTest, "Check solWordLength");
     }
 
